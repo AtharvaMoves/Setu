@@ -1,0 +1,22 @@
+---
+import LandingLayout from "../layouts/LandingLayout.astro";
+import { HeroSection } from "../components/landing/HeroSection";
+import { FeatureGrid } from "../components/landing/FeatureGrid";
+import { LandingSections } from "../components/landing/LandingSections";
+import { Header } from "../components/landing/Header";
+import { Footer } from "../components/landing/Footer";
+import { SITE_DESCRIPTION, SITE_NAME } from "../consts/site";
+---
+
+<LandingLayout
+  title={`${SITE_NAME} - AI-ready documentation template`}
+  description={SITE_DESCRIPTION}
+>
+  <Header client:load />
+  <main class="flex-1">
+    <HeroSection client:load />
+    <FeatureGrid client:load />
+    <LandingSections client:load />
+  </main>
+  <Footer />
+</LandingLayout>

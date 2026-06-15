@@ -1,0 +1,251 @@
+---
+import MobileMenuFooter from "@astrojs/starlight/components/MobileMenuFooter.astro";
+import SidebarPersister from "@astrojs/starlight/components/SidebarPersister.astro";
+import ScrollToTop from "./ScrollToTop.astro";
+import SidebarTree from "./SidebarTree.astro";
+
+const { sidebar } = Astro.locals.starlightRoute;
+
+function countLinks(entries: typeof sidebar): number {
+  let total = 0;
+  for (const entry of entries) {
+    if (entry.type === "link") total += 1;
+    if (entry.type === "group")
+      total += countLinks(entry.entries as typeof sidebar);
+  }
+  return total;
+}
+
+const filteredSidebar = sidebar;
+const pageCount = countLinks(filteredSidebar);
+---
+
+<div class="sidebar-shell">
+  <div class="sidebar-frame">
+    <div class="sidebar-intro">
+      <div class="sidebar-intro-top">
+        <span class="sidebar-track">DOCUMENTATION</span>
+        <span class="sidebar-total">{pageCount} pages</span>
+      </div>
+
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z"></path>
+            <path d="m9 11 3-2 3 2v4l-3 2-3-2v-4Z"></path>
+          </svg>
+        </div>
+        <div class="sidebar-brand-copy">
+          <h2>Documentation map</h2>
+          <p>Guides, templates, and reference</p>
+        </div>
+      </div>
+
+      <a href="/docs/" class="sidebar-back-all">
+        <span>Documentation overview</span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M5 12h14"></path>
+          <path d="m12 5 7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+
+    <SidebarPersister>
+      <div class="sidebar-nav-wrap">
+        <SidebarTree entries={filteredSidebar} />
+      </div>
+    </SidebarPersister>
+
+    <div class="sidebar-footer-note">
+      <span class="footer-note-label">Reading flow</span>
+      <p>
+        Use the active highlight and section grouping to move through the
+        documentation.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="md:sl-hidden">
+  <MobileMenuFooter />
+</div>
+
+<ScrollToTop />
+
+<style>
+  .sidebar-shell {
+    min-height: 100%;
+  }
+
+  .sidebar-frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    min-height: 100%;
+    padding: 0.15rem 0.1rem;
+    border-radius: 1.1rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent);
+    background: color-mix(in srgb, var(--background) 86%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(22px) saturate(145%);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+  }
+
+  .sidebar-intro,
+  .sidebar-footer-note {
+    padding: 0.78rem 0.8rem;
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--background) 72%, transparent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 4%, transparent);
+  }
+
+  .sidebar-intro-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar-track,
+  .sidebar-total {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.85rem;
+    border-radius: 999px;
+    padding: 0.28rem 0.62rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .sidebar-track {
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
+    color: color-mix(in srgb, var(--foreground) 78%, transparent);
+  }
+
+  .sidebar-total {
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .sidebar-brand-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    color: color-mix(in srgb, var(--foreground) 82%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .sidebar-brand-icon svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .sidebar-brand-copy h2 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 760;
+    letter-spacing: -0.03em;
+    color: var(--foreground);
+  }
+
+  .sidebar-brand-copy p,
+  .sidebar-footer-note p {
+    margin: 0.28rem 0 0;
+    color: color-mix(in srgb, var(--foreground) 58%, transparent);
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .sidebar-back-all {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    margin-top: 0.8rem;
+    padding: 0.72rem 0.74rem;
+    border-radius: 0.82rem;
+    text-decoration: none;
+    color: var(--foreground);
+    background: color-mix(in srgb, var(--foreground) 4%, transparent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent);
+    font-size: 0.77rem;
+    font-weight: 650;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .sidebar-back-all:hover {
+    transform: translateX(2px);
+    background: color-mix(in srgb, var(--foreground) 7%, transparent);
+    border-color: color-mix(in srgb, var(--foreground) 8%, transparent);
+  }
+
+  .sidebar-back-all svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    flex: none;
+  }
+
+  .sidebar-nav-wrap {
+    min-width: 0;
+  }
+
+  .sidebar-footer-note {
+    margin-top: auto;
+  }
+
+  .footer-note-label {
+    display: inline-flex;
+    align-items: center;
+    color: color-mix(in srgb, var(--foreground) 48%, transparent);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 50rem) {
+    .sidebar-frame {
+      border-radius: 0.95rem;
+      padding: 0.12rem;
+    }
+
+    .sidebar-intro,
+    .sidebar-footer-note {
+      padding: 0.68rem;
+      border-radius: 0.82rem;
+    }
+  }
+</style>

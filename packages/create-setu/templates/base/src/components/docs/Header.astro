@@ -1,0 +1,276 @@
+---
+import Search from "@astrojs/starlight/components/Search.astro";
+import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
+import MobileMenuToggle from "@astrojs/starlight/components/MobileMenuToggle.astro";
+import ProgressBar from "./ProgressBar.astro";
+import FocusToggle from "./FocusToggle.astro";
+import { GitHubStars } from "../shared/GitHubStars";
+import {
+  ABOUT_URL,
+  AI_INDEX_URL,
+  DOCS_URL,
+  REPO_URL,
+  SITE_NAME,
+} from "../../consts/site";
+
+const path = Astro.url.pathname;
+const navLinks = [
+  { label: "Home", href: "/", active: path === "/" },
+  { label: "Docs", href: DOCS_URL, active: path.startsWith("/docs") },
+  { label: "About", href: ABOUT_URL, active: path.startsWith("/about") },
+  { label: "AI Index", href: AI_INDEX_URL, active: path.startsWith("/ai") },
+  { label: "GitHub", href: REPO_URL, active: false, external: true },
+];
+---
+
+<header class="docs-header-shell">
+  <ProgressBar />
+  <div class="docs-header">
+    <div class="docs-header-left">
+      <div class="docs-mobile-toggle">
+        <MobileMenuToggle {...Astro.props} />
+      </div>
+
+      <a
+        href={DOCS_URL}
+        class="docs-brand"
+        aria-label={`${SITE_NAME} documentation home`}
+      >
+        <span class="docs-brand-mark">S</span>
+        <span class="docs-brand-copy">
+          <strong>{SITE_NAME}</strong>
+          <small>AI-ready documentation template</small>
+        </span>
+      </a>
+    </div>
+
+    <nav class="docs-nav" aria-label="Documentation navigation">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={["docs-nav-link", link.active && "is-active"]}
+            target={link.external ? "_blank" : undefined}
+            rel={link.external ? "noopener noreferrer" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="docs-header-right">
+      <div class="docs-search">
+        <Search {...Astro.props} />
+      </div>
+
+      <div class="docs-tools">
+        <FocusToggle />
+        <ThemeSelect {...Astro.props} />
+      </div>
+
+      <GitHubStars
+        client:load
+        label="Stars"
+        compact
+        className="docs-stars-action hidden sm:inline-flex"
+      />
+    </div>
+  </div>
+</header>
+
+<style>
+  :global(.header) {
+    padding: 0 !important;
+    border-bottom: none !important;
+    background: transparent !important;
+  }
+
+  .docs-header-shell {
+    position: relative;
+    height: 100%;
+    background: color-mix(in srgb, var(--background) 92%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--foreground) 6%, transparent);
+    backdrop-filter: blur(26px) saturate(140%);
+    -webkit-backdrop-filter: blur(26px) saturate(140%);
+  }
+
+  .docs-header-shell::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--foreground) 8%, transparent),
+      transparent
+    );
+    pointer-events: none;
+  }
+
+  .docs-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    padding: 0.7rem 1rem;
+  }
+
+  .docs-header-left,
+  .docs-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .docs-mobile-toggle {
+    display: flex;
+    align-items: center;
+  }
+
+  .docs-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.72rem;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;
+  }
+
+  .docs-brand-mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.6rem;
+    background: color-mix(in srgb, var(--foreground) 3%, transparent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent);
+    color: var(--foreground);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+
+  .docs-brand-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .docs-brand-copy strong {
+    font-size: 0.92rem;
+    font-weight: 680;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .docs-brand-copy small {
+    margin-top: 0.18rem;
+    color: color-mix(in srgb, var(--foreground) 48%, transparent);
+    font-size: 0.7rem;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .docs-nav {
+    display: none;
+    align-items: center;
+    justify-self: center;
+    gap: 1.1rem;
+  }
+
+  .docs-nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: auto;
+    padding: 0.2rem 0;
+    border-radius: 0;
+    color: color-mix(in srgb, var(--foreground) 56%, transparent);
+    font-size: 0.8rem;
+    font-weight: 620;
+    text-decoration: none;
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease;
+    position: relative;
+  }
+
+  .docs-nav-link:hover,
+  .docs-nav-link.is-active {
+    color: var(--foreground);
+  }
+
+  .docs-nav-link.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.75rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--foreground) 40%, transparent);
+  }
+
+  .docs-search {
+    min-width: 0;
+  }
+
+  .docs-tools {
+    display: none;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  @media (min-width: 40rem) {
+    .docs-header {
+      padding-inline: 1.25rem;
+    }
+
+    .docs-tools {
+      display: inline-flex;
+    }
+  }
+
+  @media (min-width: 50rem) {
+    .docs-mobile-toggle {
+      display: none;
+    }
+
+    .docs-nav {
+      display: inline-flex;
+    }
+
+    .docs-header {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  @media (max-width: 50rem) {
+    .docs-header {
+      grid-template-columns: 1fr auto;
+      gap: 0.75rem;
+    }
+
+    .docs-header-right {
+      justify-content: flex-end;
+    }
+
+    .docs-search {
+      max-width: 10rem;
+    }
+  }
+
+  @media (max-width: 32rem) {
+    .docs-brand-copy small {
+      display: none;
+    }
+
+    .docs-home-link {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+
+  --color-border: var(--border);
+  --color-card: var(--card);
+}
+
+@layer base {
+  /* Light mode defaults: Soft, comfortable off-white with readable slate text */
+  :root,
+  :root[data-theme="light"] {
+    --background: #fdfdfc;
+    --foreground: #1e293b;
+    --border: #e2e8f0;
+    --card: #ffffff;
+  }
+
+  /* Deep dark mode: Smooth midnight/slate instead of pure #000 */
+  :root[data-theme="dark"] {
+    --background: #0b0f19;
+    --foreground: #f8fafc;
+    --border: #1e293b;
+    --card: #111827;
+  }
+
+  body {
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+}

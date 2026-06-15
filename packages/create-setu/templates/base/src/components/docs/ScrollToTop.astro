@@ -1,0 +1,118 @@
+---
+// src/components/docs/ScrollToTop.astro
+
+// A minimalist, glassmorphic button that appears when the user scrolls down,
+// allowing them to easily snap back to the top of the page.
+---
+
+<button
+  id="setu-scroll-top"
+  class="setu-scroll-top"
+  aria-label="Scroll to top"
+  title="Scroll to top"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="m18 15-6-6-6 6"></path>
+  </svg>
+</button>
+
+<script>
+  function initScrollToTop() {
+    const btn = document.getElementById("setu-scroll-top");
+    if (!btn) return;
+
+    // Show button after scrolling down 300px
+    const toggleVisibility = () => {
+      if (window.scrollY > 300) {
+        btn.classList.add("visible");
+      } else {
+        btn.classList.remove("visible");
+      }
+    };
+
+    window.addEventListener("scroll", toggleVisibility);
+
+    // Smooth scroll to top on click
+    btn.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+
+    // Initial check
+    toggleVisibility();
+  }
+
+  // Support for standard load and Astro view transitions
+  document.addEventListener("DOMContentLoaded", initScrollToTop);
+  document.addEventListener("astro:page-load", initScrollToTop);
+</script>
+
+<style>
+  .setu-scroll-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--foreground, #f8fafc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.25),
+      inset 0 0 0 1px rgba(99, 102, 241, 0.1);
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
+  }
+
+  .setu-scroll-top.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+  }
+
+  .setu-scroll-top:hover {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: #818cf8;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      inset 0 0 0 1px rgba(99, 102, 241, 0.2);
+    transform: translateY(-4px) scale(1);
+  }
+
+  .setu-scroll-top:active {
+    transform: translateY(0) scale(0.95);
+  }
+
+  /* Adjust for mobile to not interfere with standard mobile UI */
+  @media (max-width: 768px) {
+    .setu-scroll-top {
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>

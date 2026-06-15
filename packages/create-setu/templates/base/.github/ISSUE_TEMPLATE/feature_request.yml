@@ -1,0 +1,25 @@
+name: Feature request
+description: Propose a focused improvement to Setu.
+body:
+  - type: dropdown
+    attributes:
+      label: Area
+      options:
+        - Core
+        - Interactive features
+        - AI output
+        - Documentation
+        - Developer experience
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Use case
+      description: Explain the problem before describing the solution.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true

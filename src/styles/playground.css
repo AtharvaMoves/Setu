@@ -1,0 +1,224 @@
+/*
+  SETU CODE PLAYGROUND — Mini VS Code Style Cards
+*/
+
+/* Mini Code Card Container */
+.setu-code-card {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+  overflow: hidden;
+  margin: 1.75rem 0;
+  background: color-mix(in srgb, var(--background) 78%, transparent);
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px) saturate(135%);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+}
+
+/* Card Header — Fake title bar with traffic light dots */
+.setu-code-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+}
+
+.setu-code-dots {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.setu-code-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.setu-code-dots .dot.red {
+  background: #ef4444;
+}
+
+.setu-code-dots .dot.yellow {
+  background: #f59e0b;
+}
+
+.setu-code-dots .dot.green {
+  background: #10b981;
+}
+
+.setu-code-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--foreground, #f8fafc);
+  opacity: 0.45;
+  flex: 1;
+}
+
+.setu-code-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.setu-code-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: color-mix(in srgb, var(--foreground) 3%, transparent);
+  color: var(--foreground, #f8fafc);
+  opacity: 0.4;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.setu-code-btn:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+  border-color: color-mix(in srgb, var(--foreground) 8%, transparent);
+}
+
+/* Card Body — Code content */
+.setu-code-body {
+  padding: 1.1rem 1.25rem !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.7 !important;
+  overflow-x: auto;
+  color: var(--foreground, #f8fafc);
+  opacity: 0.85;
+}
+
+.setu-code-body code {
+  font-family: inherit !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+}
+
+/* Card Footer — Try Yourself button */
+.setu-code-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.setu-try-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+  color: var(--foreground, #f8fafc);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: "Inter", sans-serif;
+}
+
+.setu-try-btn:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+  box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.4);
+}
+
+/* ═══════════════════════════════════════════════════════
+   HIGHLIGHT.JS — VS Code Dark+ Inspired Syntax Colors
+   ═══════════════════════════════════════════════════════ */
+
+.setu-code-body .hljs {
+  color: #d4d4d4;
+}
+
+/* Tags: <html>, <div>, etc. */
+.setu-code-body .hljs-tag {
+  color: #808080;
+}
+
+.setu-code-body .hljs-name {
+  color: #569cd6;
+}
+
+/* Attributes: class, href, id */
+.setu-code-body .hljs-attr {
+  color: #9cdcfe;
+}
+
+/* Strings: "value", 'text' */
+.setu-code-body .hljs-string {
+  color: #ce9178;
+}
+
+/* Comments */
+.setu-code-body .hljs-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
+/* Keywords: DOCTYPE, function, const */
+.setu-code-body .hljs-keyword,
+.setu-code-body .hljs-meta {
+  color: #c586c0;
+}
+
+/* Numbers */
+.setu-code-body .hljs-number {
+  color: #b5cea8;
+}
+
+/* CSS properties */
+.setu-code-body .hljs-attribute {
+  color: #9cdcfe;
+}
+
+/* CSS values */
+.setu-code-body .hljs-selector-tag {
+  color: #d7ba7d;
+}
+
+.setu-code-body .hljs-selector-class {
+  color: #d7ba7d;
+}
+
+.setu-code-body .hljs-selector-id {
+  color: #d7ba7d;
+}
+
+/* Built-ins */
+.setu-code-body .hljs-built_in {
+  color: #dcdcaa;
+}
+
+/* Titles (function names) */
+.setu-code-body .hljs-title {
+  color: #dcdcaa;
+}
+
+/* Symbols & Operators */
+.setu-code-body .hljs-symbol {
+  color: #d4d4d4;
+}
+
+/* DOCTYPE keyword */
+.setu-code-body .hljs-meta .hljs-keyword {
+  color: #569cd6;
+}
+
+.setu-code-body .hljs-meta .hljs-string {
+  color: #ce9178;
+}

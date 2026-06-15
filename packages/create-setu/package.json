@@ -1,0 +1,43 @@
+{
+  "name": "@rookduel/create-setu",
+  "version": "0.1.0",
+  "description": "Create a complete professional Setu documentation and learning site.",
+  "author": {
+    "name": "Atharva Sen Barai",
+    "url": "https://github.com/AtharvaMoves"
+  },
+  "type": "module",
+  "bin": {
+    "create-setu": "./bin/create-setu.mjs"
+  },
+  "files": [
+    "bin",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "keywords": [
+    "astro",
+    "documentation",
+    "learning",
+    "starlight",
+    "template",
+    "create-setu"
+  ],
+  "homepage": "https://setu.rookduel.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AtharvaMoves/Setu.git",
+    "directory": "packages/create-setu"
+  },
+  "bugs": {
+    "url": "https://github.com/AtharvaMoves/Setu/issues"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

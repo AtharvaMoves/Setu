@@ -1,0 +1,156 @@
+---
+title: Interactive Features Demo
+description: Preview Setu's built-in playground and quiz components, then reuse their MDX connections.
+sidebar:
+  order: 6
+---
+
+import Playground from "../../../../components/interactive/Playground.astro";
+import { CodePlayground } from "../../../../components/interactive/CodePlayground";
+import { Quiz } from "../../../../components/interactive/Quiz";
+
+This page imports the actual components shipped in
+`src/components/interactive/`. Edit the examples below to preview the
+experience visitors can receive inside a Setu documentation or learning page.
+
+## HTML and CSS playground
+
+The Astro playground renders immediately and keeps the HTML and CSS editors
+connected to a sandboxed live preview.
+
+<Playground
+  initialHtml={`<article class="setu-card">
+  <span>Interactive documentation</span>
+  <h2>Build once. Explain clearly.</h2>
+  <p>Edit this content or open the CSS tab.</p>
+</article>`}
+  initialCss={`.setu-card {
+  max-width: 28rem;
+  padding: 2rem;
+  border: 1px solid #6366f1;
+  border-radius: 1rem;
+  background: #111827;
+  color: #e5e7eb;
+  font-family: system-ui, sans-serif;
+}
+
+.setu-card span {
+color: #a5b4fc;
+font-size: 0.75rem;
+font-weight: 700;
+letter-spacing: 0.08em;
+text-transform: uppercase;
+}
+
+.setu-card h2 {
+margin-bottom: 0.5rem;
+color: white;
+}`}
+/>
+
+Connect it in another `.mdx` page:
+
+```mdx
+import Playground from "../../../../components/interactive/Playground.astro";
+
+<Playground
+  initialHtml={`<h2>Hello from Setu</h2>`}
+  initialCss={`h2 { color: #818cf8; }`}
+/>
+```
+
+## Executable code playground
+
+The React code playground adds a larger editor, live output, console capture,
+copying, downloading, layout controls, and fullscreen editing.
+
+<CodePlayground
+  client:visible
+  language="html"
+  title="interactive-example.html"
+  code={`<main style="font-family:system-ui;padding:2rem">
+  <h1>Setu executable example</h1>
+  <button onclick="console.log('Setu example executed')">
+    Run interaction
+  </button>
+</main>`}
+/>
+
+Connect it with a client directive so Astro hydrates the React component:
+
+```mdx
+import { CodePlayground } from "../../../../components/interactive/CodePlayground";
+
+<CodePlayground
+  client:visible
+  language="html"
+  title="example.html"
+  code={`<button onclick="console.log('Executed')">Run</button>`}
+/>
+```
+
+## Knowledge-check quiz
+
+The quiz tracks answers, explains the result, calculates a score, and supports
+retrying the complete question set.
+
+<Quiz
+  client:visible
+  title="Setu Interactive Check"
+  questions={[
+    {
+      question: "Why does the Quiz component use client:visible?",
+      options: [
+        "To hydrate its interactive React state when it approaches the viewport",
+        "To convert the quiz into plain Markdown",
+        "To publish the page directly to npm",
+      ],
+      answer: 0,
+      explanation:
+        "Astro renders the page statically and hydrates the React quiz when it becomes visible.",
+    },
+    {
+      question: "Where does Setu keep its interactive components?",
+      options: [
+        "src/components/interactive/",
+        "public/components/",
+        ".github/components/",
+      ],
+      answer: 0,
+      explanation:
+        "Setu ships playgrounds and quizzes as normal reusable components.",
+    },
+  ]}
+/>
+
+Connect a quiz using the same structure:
+
+```mdx
+import { Quiz } from "../../../../components/interactive/Quiz";
+
+<Quiz
+  client:visible
+  title="Quick Check"
+  questions={[
+    {
+      question: "Which file format supports component imports?",
+      options: ["MDX", "Plain text", "JSON only"],
+      answer: 0,
+      explanation: "MDX combines Markdown content with component imports.",
+    },
+  ]}
+/>
+```
+
+## How the connection works
+
+1. The `.mdx` page imports a component from `src/components/interactive/`.
+2. Astro components such as `Playground` render directly.
+3. React components such as `Quiz` and `CodePlayground` use a `client:*`
+   directive for browser interaction.
+4. `astro.config.mjs` loads the built-in interactive feature styles.
+5. Setu's AI text route removes interface-only JSX and preserves useful written
+   explanation and playground source.
+
+Use this page as the working reference when connecting interactive components
+inside another MDX document.

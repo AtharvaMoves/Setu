@@ -1,0 +1,79 @@
+---
+import "../tailwind.css";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "../consts/site";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = SITE_DESCRIPTION } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, SITE_URL);
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-background text-foreground font-sans antialiased min-h-screen flex flex-col transition-colors duration-300"
+  >
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  body {
+    font-family: "Inter", sans-serif;
+  }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>
+
+<script>
+  // Robust Theme Initialization Script
+  const getThemePreference = () => {
+    if (
+      typeof localStorage !== "undefined" &&
+      localStorage.getItem("starlight-theme")
+    ) {
+      return localStorage.getItem("starlight-theme");
+    }
+    return window.matchMedia("(prefers-color-scheme: light)").matches
+      ? "light"
+      : "dark";
+  };
+
+  const theme = getThemePreference();
+
+  if (theme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+    document.documentElement.classList.add("light");
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    document.documentElement.classList.add("dark");
+    document.documentElement.classList.remove("light");
+  }
+</script>

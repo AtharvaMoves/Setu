@@ -1,0 +1,59 @@
+{
+  "name": "@rookduel/setu-template",
+  "private": true,
+  "type": "module",
+  "version": "0.0.1",
+  "author": {
+    "name": "Atharva Sen Barai",
+    "url": "https://github.com/AtharvaMoves"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "workspaces": [
+    "packages/create-setu"
+  ],
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "validate:config": "node scripts/validate-config.mjs",
+    "validate:links": "node scripts/validate-links.mjs",
+    "validate:release": "node scripts/validate-release.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "validate": "npm run validate:config && npm run format:check && npm run check && npm test && npm run build && npm run validate:links",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "sync:create": "node scripts/sync-create-template.mjs",
+    "test:create": "npm run sync:create && node packages/create-setu/test/cli.test.mjs",
+    "test:generated": "npm run sync:create && node scripts/test-generated-projects.mjs",
+    "pack:check": "npm run sync:create && npm pack --dry-run --workspace @rookduel/create-setu"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/starlight": "^0.37.7",
+    "@monaco-editor/react": "^4.7.0",
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^5.6.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.35.0",
+    "highlight.js": "^11.11.1",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sharp": "^0.34.2",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.9.2"
+  }
+}

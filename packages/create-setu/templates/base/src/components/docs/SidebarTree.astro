@@ -1,0 +1,381 @@
+---
+type SidebarLink = {
+  type: "link";
+  label: string;
+  href: string;
+  isCurrent: boolean;
+  badge?: { text: string } | undefined;
+  attrs: Record<string, any>;
+};
+
+type SidebarGroup = {
+  type: "group";
+  label: string;
+  entries: SidebarEntry[];
+  collapsed: boolean;
+  badge?: { text: string } | undefined;
+};
+
+type SidebarEntry = SidebarLink | SidebarGroup;
+
+interface Props {
+  entries: SidebarEntry[];
+  nested?: boolean;
+}
+
+const { entries, nested = false } = Astro.props;
+
+function flattenEntries(items: SidebarEntry[]): SidebarLink[] {
+  return items.flatMap((entry) =>
+    entry.type === "group" ? flattenEntries(entry.entries) : entry,
+  );
+}
+
+function getIconSvg(
+  label: string,
+  href = "",
+  type: SidebarEntry["type"] = "link",
+) {
+  const key = `${label} ${href}`.toLowerCase();
+
+  if (type === "group") {
+    if (key.includes("getting started"))
+      return `<path d="M12 3l7 4v10l-7 4-7-4V7l7-4Z"/><path d="M9.5 10.5 12 9l2.5 1.5v3L12 15l-2.5-1.5v-3Z"/>`;
+    if (key.includes("html"))
+      return `<path d="m7 8-4 4 4 4"/><path d="m17 8 4 4-4 4"/><path d="m14 4-4 16"/>`;
+    if (key.includes("css"))
+      return `<path d="M4 5h16"/><path d="M7 12h10"/><path d="M10 19h4"/>`;
+    if (key.includes("javascript"))
+      return `<path d="M8 8v8"/><path d="M16 8v5a3 3 0 0 1-6 0"/>`;
+    return `<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h10"/>`;
+  }
+
+  if (
+    key.includes("welcome") ||
+    key.includes("overview") ||
+    key.endsWith("/docs/")
+  ) {
+    return `<path d="M3 11.5 12 4l9 7.5"/><path d="M6 10.5V20h12v-9.5"/>`;
+  }
+  if (key.includes("intro")) {
+    return `<path d="M6 4h9l3 3v13H6z"/><path d="M15 4v3h3"/><path d="M9 12h6"/><path d="M9 16h4"/>`;
+  }
+  if (
+    key.includes("syntax") ||
+    key.includes("attribute") ||
+    key.includes("selector") ||
+    key.includes("element")
+  ) {
+    return `<path d="m8 9-3 3 3 3"/><path d="m16 9 3 3-3 3"/><path d="m14 6-4 12"/>`;
+  }
+  if (
+    key.includes("style") ||
+    key.includes("color") ||
+    key.includes("font") ||
+    key.includes("layout")
+  ) {
+    return `<path d="M12 4 4 7l8 3 8-3-8-3Z"/><path d="m4 12 8 3 8-3"/><path d="m4 17 8 3 8-3"/>`;
+  }
+  if (
+    key.includes("quiz") ||
+    key.includes("challenge") ||
+    key.includes("exercise")
+  ) {
+    return `<path d="M9 9a3 3 0 1 1 6 0c0 2-3 2-3 4"/><path d="M12 17h.01"/>`;
+  }
+  return `<circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="m4.9 4.9 2.1 2.1"/><path d="m17 17 2.1 2.1"/><path d="M2 12h3"/><path d="M19 12h3"/>`;
+}
+---
+
+<ul class:list={["sidebar-tree", nested && "is-nested"]}>
+  {
+    entries.map((entry) => {
+      const isGroup = entry.type === "group";
+      const hasCurrentDescendant = isGroup
+        ? flattenEntries(entry.entries).some((item) => item.isCurrent)
+        : false;
+      const iconSvg = getIconSvg(
+        entry.label,
+        isGroup ? "" : entry.href,
+        entry.type,
+      );
+
+      return (
+        <li
+          class:list={[
+            "tree-item",
+            isGroup && "tree-item-group",
+            !isGroup && entry.isCurrent && "is-current",
+          ]}
+        >
+          {isGroup ? (
+            <details class="tree-group" open={hasCurrentDescendant}>
+              <summary class="tree-summary">
+                <span class="tree-summary-main">
+                  <span
+                    class="tree-icon"
+                    set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>`}
+                  />
+                  <span class="tree-summary-copy">
+                    <span class="tree-label">{entry.label}</span>
+                    {entry.badge && (
+                      <span class="tree-badge">{entry.badge.text}</span>
+                    )}
+                  </span>
+                </span>
+                <span class="tree-caret" aria-hidden="true">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m9 6 6 6-6 6" />
+                  </svg>
+                </span>
+              </summary>
+              <div class="tree-group-body">
+                <Astro.self entries={entry.entries} nested />
+              </div>
+            </details>
+          ) : (
+            <a
+              href={entry.href}
+              aria-current={entry.isCurrent ? "page" : undefined}
+              class:list={[
+                "tree-link",
+                entry.isCurrent && "is-current",
+                entry.attrs.class,
+              ]}
+              {...entry.attrs}
+            >
+              <span
+                class="tree-icon"
+                set:html={`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>`}
+              />
+              <span class="tree-link-copy">
+                <span class="tree-label">{entry.label}</span>
+                {entry.badge && (
+                  <span class="tree-badge">{entry.badge.text}</span>
+                )}
+              </span>
+            </a>
+          )}
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .sidebar-tree {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .sidebar-tree.is-nested {
+    position: relative;
+    margin-left: 0.05rem;
+    padding-left: 0.45rem;
+    gap: 0.18rem;
+  }
+
+  .sidebar-tree.is-nested::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    bottom: 0.15rem;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      color-mix(in srgb, var(--foreground) 10%, transparent),
+      transparent
+    );
+  }
+
+  .tree-item {
+    min-width: 0;
+  }
+
+  .tree-group {
+    border-radius: 0.95rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 4%, transparent);
+    background: color-mix(in srgb, var(--background) 74%, transparent);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .is-nested .tree-group {
+    border: none;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+  }
+
+  .tree-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.72rem 0.7rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .tree-summary::-webkit-details-marker,
+  .tree-summary::marker {
+    display: none;
+  }
+
+  .tree-summary-main,
+  .tree-link {
+    display: flex;
+    align-items: center;
+    gap: 0.72rem;
+    min-width: 0;
+  }
+
+  .tree-group-body {
+    padding: 0 0.24rem 0.28rem 0.24rem;
+  }
+
+  .is-nested .tree-group-body {
+    padding: 0.08rem 0 0;
+  }
+
+  .tree-link {
+    width: 100%;
+    padding: 0.62rem 0.62rem;
+    border-radius: 0.78rem;
+    color: color-mix(in srgb, var(--foreground) 74%, transparent);
+    text-decoration: none;
+    transition:
+      transform 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+    border: 1px solid transparent;
+  }
+
+  .tree-link:hover,
+  .tree-summary:hover {
+    color: var(--foreground);
+  }
+
+  .tree-link:hover {
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    border-color: color-mix(in srgb, var(--foreground) 7%, transparent);
+    transform: translateX(2px);
+  }
+
+  .tree-link.is-current {
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
+    border-color: color-mix(in srgb, var(--foreground) 8%, transparent);
+    color: var(--foreground);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .tree-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.68rem;
+    height: 1.68rem;
+    border-radius: 0.56rem;
+    background: color-mix(in srgb, var(--foreground) 3%, transparent);
+    color: color-mix(in srgb, var(--foreground) 68%, transparent);
+    border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .tree-link:hover .tree-icon,
+  .tree-link.is-current .tree-icon,
+  .tree-summary:hover .tree-icon,
+  .tree-group[open] > .tree-summary .tree-icon {
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    color: var(--foreground);
+    border-color: color-mix(in srgb, var(--foreground) 8%, transparent);
+  }
+
+  .tree-icon :global(svg) {
+    width: 0.88rem;
+    height: 0.88rem;
+  }
+
+  .tree-summary-copy,
+  .tree-link-copy {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.34rem;
+  }
+
+  .tree-label {
+    display: block;
+    min-width: 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tree-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.12rem 0.32rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    color: color-mix(in srgb, var(--foreground) 54%, transparent);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .tree-caret {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    color: color-mix(in srgb, var(--foreground) 44%, transparent);
+    transition:
+      transform 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .tree-caret svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .tree-group[open] > .tree-summary .tree-caret {
+    transform: rotate(90deg);
+    color: var(--foreground);
+  }
+
+  @media (max-width: 50rem) {
+    .tree-group {
+      border-radius: 1rem;
+    }
+
+    .tree-summary,
+    .tree-link {
+      padding-inline: 0.56rem;
+    }
+  }
+</style>

@@ -1,0 +1,30 @@
+name: Publish create-setu
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm run validate
+      - run: npm run validate:release
+      - run: npm run test:create
+      - run: npm run test:generated
+      - name: Publish create-setu when needed
+        run: |
+          VERSION=$(node -p "require('./packages/create-setu/package.json').version")
+          npm view "@rookduel/create-setu@$VERSION" version >/dev/null 2>&1 ||
+            npm publish --workspace @rookduel/create-setu --access public

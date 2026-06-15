@@ -1,0 +1,282 @@
+---
+import LandingLayout from "../layouts/LandingLayout.astro";
+import { Footer } from "../components/landing/Footer";
+import { Header } from "../components/landing/Header";
+import {
+  DOCS_URL,
+  MAIN_SITE_URL,
+  REPO_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+} from "../consts/site";
+
+const principles = [
+  {
+    title: "Human-first reading",
+    description:
+      "Clear navigation, focused pages, search, and accessible presentation keep documentation useful to real people.",
+  },
+  {
+    title: "Predictable AI access",
+    description:
+      "Every document can expose stable plain-text output alongside a machine-readable discovery index.",
+  },
+  {
+    title: "Built-in interaction",
+    description:
+      "Playgrounds and quizzes ship with Setu, ready for documentation or structured learning experiences.",
+  },
+];
+
+const audiences = [
+  {
+    title: "Product and engineering teams",
+    description:
+      "Publish product documentation, architecture notes, integration guides, internal references, and operational knowledge from one maintainable codebase.",
+  },
+  {
+    title: "Educators and technical writers",
+    description:
+      "Build structured lessons and tutorials, then introduce quizzes or playgrounds only where interaction improves understanding.",
+  },
+  {
+    title: "Open-source maintainers",
+    description:
+      "Give contributors searchable documentation, transparent source files, reusable templates, and predictable contribution workflows.",
+  },
+];
+
+const foundation = [
+  "Markdown and MDX content that remains portable and version controlled",
+  "Responsive navigation, search, theming, metadata, and static deployment",
+  "Plain-text document endpoints and a machine-readable discovery index",
+  "Built-in interactive playgrounds and knowledge-check quizzes",
+  "A public-template workflow and one complete npm creation command",
+  "Validation commands that protect content, builds, and internal links",
+];
+
+const workflow = [
+  {
+    number: "01",
+    title: "Own the source",
+    description:
+      "Keep documentation beside the project, review it through Git, and deploy it using infrastructure your team controls.",
+  },
+  {
+    number: "02",
+    title: "Serve both audiences",
+    description:
+      "Use the same content source for polished human-facing pages and stable AI-readable output.",
+  },
+  {
+    number: "03",
+    title: "Use interaction deliberately",
+    description:
+      "Use the included learning-oriented components where they improve understanding and keep simpler pages focused.",
+  },
+];
+---
+
+<LandingLayout
+  title={`About - ${SITE_NAME}`}
+  description={`Learn why ${SITE_NAME} exists and how it supports documentation for people and AI systems.`}
+>
+  <Header client:load />
+  <main class="flex-1 px-6 pb-24 pt-36 sm:pt-44">
+    <section class="container mx-auto max-w-6xl">
+      <p
+        class="mb-5 text-xs font-semibold uppercase tracking-[0.22em] text-foreground/40"
+      >
+        About Setu
+      </p>
+      <h1
+        class="max-w-4xl text-4xl font-semibold tracking-[-0.04em] text-foreground sm:text-6xl"
+      >
+        Documentation infrastructure designed for two audiences.
+      </h1>
+      <p
+        class="mt-7 max-w-3xl text-base leading-8 text-foreground/55 sm:text-lg"
+      >
+        {SITE_DESCRIPTION} Setu gives maintainers a professional starting point without
+        locking their content into a hosted platform or proprietary format.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href={DOCS_URL}
+          class="inline-flex h-11 items-center rounded-md bg-foreground px-5 text-sm font-semibold text-background transition-opacity hover:opacity-90"
+        >
+          Explore documentation
+        </a>
+        <a
+          href={REPO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex h-11 items-center rounded-md border border-foreground/12 px-5 text-sm font-semibold text-foreground transition-colors hover:bg-foreground/5"
+        >
+          View GitHub repository
+        </a>
+      </div>
+    </section>
+
+    <section
+      class="container mx-auto mt-24 max-w-6xl border-y border-foreground/10 py-16"
+    >
+      <div class="grid gap-10 lg:grid-cols-[0.7fr_1.3fr]">
+        <div>
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/35"
+          >
+            Our approach
+          </p>
+          <h2
+            class="mt-4 text-3xl font-semibold tracking-tight text-foreground"
+          >
+            One complete foundation. Clear component boundaries.
+          </h2>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-3">
+          {
+            principles.map((principle) => (
+              <article class="rounded-xl border border-foreground/10 bg-foreground/[0.025] p-6">
+                <h3 class="font-semibold text-foreground">{principle.title}</h3>
+                <p class="mt-3 text-sm leading-7 text-foreground/50">
+                  {principle.description}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="container mx-auto mt-24 max-w-6xl">
+      <div class="max-w-3xl">
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/35"
+        >
+          Who Setu serves
+        </p>
+        <h2
+          class="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+        >
+          A useful foundation across documentation and learning.
+        </h2>
+        <p class="mt-5 text-base leading-8 text-foreground/50">
+          Setu is intentionally not tied to one industry or content model. Its
+          structure supports teams that value clear ownership, portable content,
+          and predictable publishing.
+        </p>
+      </div>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {
+          audiences.map((audience) => (
+            <article class="rounded-xl border border-foreground/10 bg-foreground/[0.025] p-6 sm:p-7">
+              <h3 class="text-lg font-semibold tracking-tight text-foreground">
+                {audience.title}
+              </h3>
+              <p class="mt-4 text-sm leading-7 text-foreground/50">
+                {audience.description}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section
+      class="container mx-auto mt-24 grid max-w-6xl gap-12 border-y border-foreground/10 py-16 lg:grid-cols-2"
+    >
+      <div>
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/35"
+        >
+          Included foundation
+        </p>
+        <h2
+          class="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+        >
+          The infrastructure needed before content can succeed.
+        </h2>
+        <p class="mt-5 max-w-xl text-base leading-8 text-foreground/50">
+          Setu handles the repeatable publishing concerns so maintainers can
+          spend more time improving the information itself.
+        </p>
+      </div>
+      <ul class="grid gap-3 sm:grid-cols-2">
+        {
+          foundation.map((item) => (
+            <li class="rounded-lg border border-foreground/10 bg-foreground/[0.02] p-4 text-sm leading-6 text-foreground/60">
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="container mx-auto mt-24 max-w-6xl">
+      <div class="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
+        <div>
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/35"
+          >
+            Working model
+          </p>
+          <h2
+            class="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+          >
+            Documentation as durable product infrastructure.
+          </h2>
+        </div>
+        <div
+          class="divide-y divide-foreground/10 border-y border-foreground/10"
+        >
+          {
+            workflow.map((step) => (
+              <article class="grid gap-3 py-7 sm:grid-cols-[3rem_10rem_1fr]">
+                <span class="text-sm text-foreground/30">{step.number}</span>
+                <h3 class="font-semibold text-foreground">{step.title}</h3>
+                <p class="text-sm leading-7 text-foreground/50">
+                  {step.description}
+                </p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="container mx-auto mt-24 max-w-6xl">
+      <div
+        class="rounded-2xl border border-foreground/10 bg-foreground/[0.025] p-7 sm:p-10 lg:flex lg:items-end lg:justify-between lg:gap-12"
+      >
+        <div class="max-w-3xl">
+          <p
+            class="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/35"
+          >
+            Creator and personal brand
+          </p>
+          <h2
+            class="mt-4 text-3xl font-semibold tracking-tight text-foreground"
+          >
+            Created by Atharva Sen Barai.
+          </h2>
+          <p class="mt-5 text-base leading-8 text-foreground/50">
+            Setu is created and maintained by Atharva Sen Barai, and shared
+            through RookDuel, his personal brand for independent work. It is
+            released under the MIT License so teams can adapt it to their own
+            products, internal systems, documentation, and learning platforms.
+          </p>
+        </div>
+        <a
+          href={MAIN_SITE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-7 inline-flex shrink-0 rounded-md border border-foreground/10 px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-foreground/5 lg:mt-0"
+        >
+          Visit the RookDuel main site
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</LandingLayout>

@@ -1,0 +1,265 @@
+---
+export interface Props {
+  initialHtml?: string;
+  initialCss?: string;
+}
+
+const {
+  initialHtml = '<div class="box">\n  <h2>Hello Developer</h2>\n  <p>Edit me to see live changes!</p>\n</div>',
+  initialCss = ".box {\n  padding: 2rem;\n  border-radius: 1rem;\n  background: rgba(99, 102, 241, 0.1);\n  border: 1px solid rgba(99, 102, 241, 0.3);\n  color: white;\n  text-align: center;\n  font-family: sans-serif;\n}\n\nh2 {\n  margin-top: 0;\n  color: #818cf8;\n}",
+} = Astro.props;
+
+// Generate a random ID for this specific playground instance to avoid collisions
+const id = Math.random().toString(36).substring(7);
+---
+
+<div class={`playground-wrapper pg-${id}`}>
+  <!-- Tabs/Header -->
+  <div class="pg-header">
+    <div class="pg-tabs">
+      <button class="pg-tab active" data-target="html">HTML</button>
+      <button class="pg-tab" data-target="css">CSS</button>
+    </div>
+    <div class="pg-actions">
+      <span class="live-indicator"><span class="pulse"></span> Live Output</span
+      >
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="pg-body">
+    <!-- Editor Pane -->
+    <div class="pg-editor-pane">
+      <textarea class="pg-textarea html-editor active" spellcheck="false"
+        >{initialHtml}</textarea
+      >
+      <textarea class="pg-textarea css-editor" spellcheck="false"
+        >{initialCss}</textarea
+      >
+    </div>
+
+    <!-- Output Pane -->
+    <div class="pg-output-pane">
+      <iframe class="pg-iframe" sandbox="allow-scripts"></iframe>
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ id }}>
+  const wrapper = document.querySelector(`.pg-${id}`);
+  if (wrapper) {
+    const htmlEditor = wrapper.querySelector(".html-editor");
+    const cssEditor = wrapper.querySelector(".css-editor");
+    const iframe = wrapper.querySelector(".pg-iframe");
+    const tabs = wrapper.querySelectorAll(".pg-tab");
+    const textareas = wrapper.querySelectorAll(".pg-textarea");
+
+    // Handle Tabs
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        textareas.forEach((t) => t.classList.remove("active"));
+
+        tab.classList.add("active");
+        wrapper
+          .querySelector(`.${tab.dataset.target}-editor`)
+          .classList.add("active");
+      });
+    });
+
+    // Handle Live Preview
+    const updateIframe = () => {
+      const html = htmlEditor.value;
+      const css = `<style>${cssEditor.value}</style>`;
+
+      const content = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          ${css}
+        </head>
+        <body style="margin:0; padding:1rem; display:flex; justify-content:center; align-items:center; min-height:100vh; box-sizing:border-box; background: transparent;">
+          ${html}
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob([content], { type: "text/html" });
+      iframe.src = URL.createObjectURL(blob);
+    };
+
+    // Listeners
+    htmlEditor.addEventListener("input", updateIframe);
+    cssEditor.addEventListener("input", updateIframe);
+
+    // Initial Render
+    updateIframe();
+  }
+</script>
+
+<style>
+  .playground-wrapper {
+    margin: 2rem 0;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    background: var(--card, rgba(17, 24, 39, 0.5));
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .pg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    padding: 0 0.5rem;
+  }
+
+  .pg-tabs {
+    display: flex;
+  }
+
+  .pg-tab {
+    background: transparent;
+    border: none;
+    color: var(--foreground);
+    opacity: 0.5;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .pg-tab:hover {
+    opacity: 0.8;
+  }
+
+  .pg-tab.active {
+    opacity: 1;
+    color: #818cf8;
+    border-bottom-color: #818cf8;
+  }
+
+  .pg-actions {
+    padding-right: 1rem;
+  }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pulse {
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulse-anim 2s infinite;
+  }
+
+  @keyframes pulse-anim {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+  }
+
+  /* Body */
+  .pg-body {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+  }
+
+  @media (min-width: 768px) {
+    .pg-body {
+      flex-direction: row;
+    }
+  }
+
+  /* Editor */
+  .pg-editor-pane {
+    flex: 1;
+    border-right: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    position: relative;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  @media (min-width: 768px) {
+    .pg-editor-pane {
+      border-bottom: none;
+    }
+  }
+
+  .pg-textarea {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .pg-textarea.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Custom scrollbar for textarea */
+  .pg-textarea::-webkit-scrollbar {
+    width: 8px;
+  }
+  .pg-textarea::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  /* Output */
+  .pg-output-pane {
+    flex: 1;
+    background: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.05)"/></svg>');
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pg-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+  }
+</style>

@@ -1,0 +1,862 @@
+:root {
+  --setu-accent: #38bdf8;
+  --setu-accent-strong: #10b981;
+  --setu-surface: color-mix(in srgb, var(--card) 60%, transparent);
+  --setu-surface-strong: color-mix(in srgb, var(--card) 72%, transparent);
+  --setu-panel-bg: color-mix(in srgb, var(--background) 84%, transparent);
+  --setu-panel-bg-soft: color-mix(in srgb, var(--background) 74%, transparent);
+  --setu-border-soft: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --setu-border-strong: color-mix(in srgb, var(--foreground) 14%, transparent);
+  --setu-text-soft: color-mix(in srgb, var(--foreground) 70%, transparent);
+  --setu-text-muted: color-mix(in srgb, var(--foreground) 52%, transparent);
+  --setu-shadow: 0 10px 24px -22px rgba(2, 8, 23, 0.28);
+
+  --sl-color-bg: var(--background);
+  --sl-color-bg-nav: transparent;
+  --sl-color-bg-sidebar: transparent;
+  --sl-color-text: var(--foreground);
+  --sl-color-text-accent: var(--foreground);
+  --sl-color-white: var(--foreground);
+  --sl-color-black: var(--background);
+  --sl-color-accent: var(--setu-accent);
+  --sl-color-accent-high: var(--setu-accent);
+  --sl-color-accent-low: color-mix(
+    in srgb,
+    var(--setu-accent) 18%,
+    transparent
+  );
+  --sl-color-hairline: var(--setu-border-soft);
+  --sl-color-hairline-light: var(--setu-border-soft);
+  --sl-color-hairline-shade: var(--setu-border-soft);
+  --sl-font: "Inter", "Segoe UI", sans-serif;
+  --sl-font-system: "Inter", "Segoe UI", sans-serif;
+  --sl-font-mono: "JetBrains Mono", "Cascadia Code", monospace;
+  --sl-nav-height: 4.5rem;
+  --sl-sidebar-width: 17.5rem;
+  --sl-sidebar-pad-x: 0rem;
+  --sl-content-width: 54rem;
+  --sl-border-radius: 1.2rem;
+}
+
+:root[data-theme="light"] {
+  --setu-accent: #0284c7;
+  --setu-accent-strong: #059669;
+  --setu-surface: rgba(255, 255, 255, 0.82);
+  --setu-surface-strong: rgba(255, 255, 255, 0.96);
+  --setu-shadow: 0 30px 80px -52px rgba(15, 23, 42, 0.18);
+}
+
+html {
+  scroll-behavior: smooth;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(16, 185, 129, 0.08),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(56, 189, 248, 0.08),
+      transparent 28rem
+    ),
+    var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  color: var(--foreground);
+  letter-spacing: -0.012em;
+}
+
+/* Frame */
+.page {
+  background: transparent;
+}
+
+.main-frame {
+  position: relative;
+}
+
+.main-frame::before {
+  content: "";
+  position: fixed;
+  inset: var(--sl-nav-height) 0 0 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(16, 185, 129, 0.05),
+      transparent 22rem
+    ),
+    radial-gradient(
+      circle at 100% 15%,
+      rgba(56, 189, 248, 0.07),
+      transparent 26rem
+    );
+  z-index: -1;
+}
+
+.sidebar-pane {
+  padding: 0.12rem 0.05rem 0.12rem 0.05rem;
+  background: transparent !important;
+}
+
+.sidebar-content {
+  gap: 0.4rem !important;
+  padding: 0 !important;
+}
+
+.main-pane {
+  padding: 1.2rem 0.75rem 3rem !important;
+}
+
+.content-panel {
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.content-panel + .content-panel {
+  margin-top: 0.15rem !important;
+}
+
+.content-panel:first-of-type {
+  padding-top: 0 !important;
+}
+
+.content-panel > .sl-markdown-content {
+  max-width: 44rem;
+}
+
+.content-panel
+  :is(.sl-markdown-content, .pagination-links, .hero, .content-panel-content) {
+  position: relative;
+}
+
+/* Markdown article surface */
+.sl-markdown-content {
+  padding: 0 2rem 2.8rem;
+  font-size: 1rem !important;
+  line-height: 1.9 !important;
+  color: var(--setu-text-soft) !important;
+}
+
+.sl-markdown-content > :first-child {
+  margin-top: 0 !important;
+}
+
+.sl-markdown-content > :last-child {
+  margin-bottom: 0 !important;
+}
+
+.content-panel > .sl-markdown-content + .content-panel,
+.content-panel > .sl-markdown-content + .pagination-links,
+.sl-markdown-content + .pagination-links {
+  margin-top: 0.75rem !important;
+}
+
+.sl-markdown-content :is(p, li, dd, blockquote) {
+  color: color-mix(in srgb, var(--foreground) 74%, transparent) !important;
+}
+
+.sl-markdown-content p {
+  max-width: 42rem;
+  margin-bottom: 1.25rem !important;
+  text-wrap: pretty;
+}
+
+.sl-markdown-content h2:not(:where(.not-content *)) {
+  max-width: 40rem;
+  margin-top: 3.5rem !important;
+  margin-bottom: 1rem !important;
+  padding-top: 0.1rem;
+  font-size: clamp(1.55rem, 2.1vw, 2rem) !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.05em !important;
+  line-height: 1.12 !important;
+  color: var(--foreground) !important;
+  border-bottom: none !important;
+}
+
+.sl-markdown-content h3:not(:where(.not-content *)) {
+  max-width: 40rem;
+  margin-top: 2.35rem !important;
+  margin-bottom: 0.75rem !important;
+  font-size: clamp(1.12rem, 1.3vw, 1.3rem) !important;
+  font-weight: 710 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.2 !important;
+  color: var(--foreground) !important;
+}
+
+.sl-markdown-content h4:not(:where(.not-content *)) {
+  max-width: 40rem;
+  margin-top: 2rem !important;
+  margin-bottom: 0.65rem !important;
+  color: var(--foreground) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.sl-markdown-content :is(h2, h3, h4, h5, h6) + p {
+  margin-top: 0 !important;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+  color: color-mix(in srgb, var(--foreground) 92%, transparent) !important;
+  text-decoration: none !important;
+  background-image: linear-gradient(
+    to bottom,
+    transparent calc(100% - 1px),
+    color-mix(in srgb, var(--foreground) 26%, transparent) 0
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  transition:
+    color 0.2s ease,
+    background-image 0.2s ease;
+}
+
+.sl-markdown-content a:hover:not(:where(.not-content *)) {
+  color: #ffffff !important;
+  background-image: linear-gradient(
+    to bottom,
+    transparent calc(100% - 1px),
+    color-mix(in srgb, var(--foreground) 48%, transparent) 0
+  );
+}
+
+.sl-markdown-content strong {
+  color: var(--foreground) !important;
+  font-weight: 760 !important;
+}
+
+.sl-markdown-content em {
+  color: color-mix(in srgb, var(--foreground) 88%, transparent) !important;
+}
+
+.sl-markdown-content code:not(:where(.not-content *)) {
+  padding: 0.18rem 0.42rem !important;
+  border-radius: 0.42rem !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent) !important;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent) !important;
+  color: color-mix(in srgb, var(--foreground) 92%, transparent) !important;
+  font-size: 0.84em !important;
+  font-weight: 560;
+}
+
+.sl-markdown-content pre:not(:where(.not-content *)),
+.sl-markdown-content .expressive-code {
+  margin: 1.6rem 0 1.9rem !important;
+  border-radius: 1rem !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent) !important;
+  background: var(--setu-panel-bg) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  overflow: hidden;
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+}
+
+.sl-markdown-content pre code:not(:where(.not-content *)) {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.sl-markdown-content ul,
+.sl-markdown-content ol {
+  max-width: 40rem;
+  margin: 0 0 1.35rem !important;
+  padding-left: 1.15rem !important;
+}
+
+.sl-markdown-content li {
+  padding-left: 0.15rem;
+}
+
+.sl-markdown-content li + li {
+  margin-top: 0.55rem !important;
+}
+
+.sl-markdown-content ul li::marker {
+  color: color-mix(in srgb, var(--foreground) 34%, transparent);
+}
+
+.sl-markdown-content blockquote:not(:where(.not-content *)) {
+  max-width: 40rem;
+  margin: 1.8rem 0 !important;
+  padding: 0.15rem 0 0.15rem 1.2rem !important;
+  border: none !important;
+  border-left: 2px solid color-mix(in srgb, var(--foreground) 16%, transparent) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+.sl-markdown-content blockquote p {
+  color: color-mix(in srgb, var(--foreground) 66%, transparent) !important;
+}
+
+.starlight-aside {
+  margin: 2rem 0 !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  border-left: 3px solid color-mix(in srgb, var(--foreground) 18%, transparent) !important;
+  border-radius: 1rem !important;
+  background: var(--setu-panel-bg-soft) !important;
+  padding: 1rem 1.1rem !important;
+  backdrop-filter: blur(16px) saturate(135%);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+}
+
+.starlight-aside .starlight-aside__title {
+  color: var(--foreground) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em !important;
+}
+
+.sl-markdown-content details:not(:where(.not-content *)) {
+  max-width: 40rem;
+  border-radius: 0.95rem !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  background: var(--setu-panel-bg-soft) !important;
+  padding: 0.15rem 0.2rem !important;
+}
+
+.sl-markdown-content summary:not(:where(.not-content *)) {
+  font-weight: 650 !important;
+  color: var(--foreground) !important;
+  padding: 0.7rem 0.75rem !important;
+}
+
+.sl-markdown-content details > :not(summary) {
+  padding-inline: 0.75rem;
+}
+
+.sl-markdown-content table:not(:where(.not-content *)) {
+  width: 100% !important;
+  margin: 1.6rem 0 1.9rem !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  overflow: hidden;
+  border-radius: 1rem !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent) !important;
+  background: var(--setu-panel-bg-soft);
+}
+
+.sl-markdown-content th:not(:where(.not-content *)) {
+  background: color-mix(in srgb, var(--foreground) 4%, transparent) !important;
+  color: color-mix(in srgb, var(--foreground) 56%, transparent) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.85rem 1rem !important;
+}
+
+.sl-markdown-content td:not(:where(.not-content *)) {
+  padding: 0.85rem 1rem !important;
+  color: color-mix(in srgb, var(--foreground) 72%, transparent) !important;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+}
+
+.sl-markdown-content hr:not(:where(.not-content *)) {
+  border: none !important;
+  height: 1px !important;
+  background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
+  margin: 2.6rem 0 !important;
+}
+
+.sl-markdown-content img:not(:where(.not-content *)),
+.sl-markdown-content picture:not(:where(.not-content *)) {
+  margin: 1.8rem 0 2rem !important;
+  border-radius: 1rem !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent) !important;
+  overflow: hidden;
+}
+
+/* TOC */
+.right-sidebar-container {
+  padding-top: 0.9rem;
+}
+
+.right-sidebar-panel {
+  padding: 0.35rem 0.2rem 0.35rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 5%, transparent);
+  border-radius: 1.1rem;
+  background: var(--setu-panel-bg);
+  box-shadow: none;
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+}
+
+starlight-toc > nav > h2,
+.right-sidebar-panel :global(h2) {
+  margin-bottom: 0.85rem !important;
+  color: color-mix(in srgb, var(--foreground) 88%, transparent) !important;
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  text-transform: none;
+}
+
+starlight-toc > nav {
+  padding: 0.9rem 0.85rem 0.85rem !important;
+}
+
+starlight-toc ul,
+starlight-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+starlight-toc li + li {
+  margin-top: 0.18rem;
+}
+
+starlight-toc a {
+  display: block;
+  padding: 0.48rem 0.62rem;
+  border-radius: 0.72rem;
+  color: color-mix(in srgb, var(--foreground) 54%, transparent) !important;
+  font-size: 0.76rem !important;
+  font-weight: 560;
+  line-height: 1.35;
+  text-decoration: none !important;
+  border: 1px solid transparent;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+starlight-toc a:hover,
+starlight-toc a[aria-current="true"] {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground) !important;
+  border-color: color-mix(in srgb, var(--foreground) 7%, transparent);
+}
+
+starlight-toc a:hover {
+  transform: translateX(2px);
+}
+
+starlight-toc a[aria-current="true"] {
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+
+starlight-toc ul ul {
+  margin-top: 0.22rem;
+  margin-left: 0.45rem;
+  padding-left: 0.55rem;
+  border-left: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent);
+}
+
+mobile-starlight-toc nav {
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  background: color-mix(in srgb, var(--background) 92%, transparent) !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}
+
+mobile-starlight-toc summary {
+  padding: 0.55rem 0.9rem !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+}
+
+mobile-starlight-toc .toggle {
+  gap: 0.8rem !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  border-radius: 999px !important;
+  padding-block: 0.65rem !important;
+  padding-inline-start: 0.95rem !important;
+  padding-inline-end: 0.72rem !important;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent) !important;
+  color: color-mix(in srgb, var(--foreground) 72%, transparent) !important;
+  font-size: 0.78rem !important;
+  font-weight: 650 !important;
+}
+
+mobile-starlight-toc details[open] .toggle,
+mobile-starlight-toc details .toggle:hover {
+  color: var(--foreground) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--foreground) 9%,
+    transparent
+  ) !important;
+}
+
+mobile-starlight-toc .display-current {
+  color: color-mix(in srgb, var(--foreground) 54%, transparent) !important;
+  font-size: 0.74rem !important;
+}
+
+mobile-starlight-toc .dropdown {
+  margin-top: 0 !important;
+  border: none !important;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  background: color-mix(in srgb, var(--background) 94%, transparent) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+}
+
+/* Breadcrumbs and metadata */
+.breadcrumbs,
+.meta {
+  color: var(--setu-text-muted) !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase;
+}
+
+.breadcrumbs a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.breadcrumbs {
+  margin-bottom: 0.85rem !important;
+}
+
+footer {
+  padding: 0 2rem 1.8rem;
+}
+
+footer .meta {
+  margin-top: 1.4rem !important;
+  padding-top: 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
+  gap: 0.8rem 1rem !important;
+  align-items: center;
+}
+
+footer .meta p {
+  margin: 0 !important;
+  color: color-mix(in srgb, var(--foreground) 50%, transparent) !important;
+  font-size: 0.72rem !important;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+footer .kudos {
+  margin: 1rem auto 0 !important;
+  color: color-mix(in srgb, var(--foreground) 42%, transparent) !important;
+}
+
+footer .kudos:hover {
+  color: var(--foreground) !important;
+}
+
+/* Pagination */
+.pagination-links {
+  gap: 0.85rem !important;
+  padding: 0 2rem 1.35rem;
+  margin-top: 0.5rem !important;
+}
+
+.pagination-links a {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  border-radius: 1rem !important;
+  background: var(--setu-panel-bg-soft) !important;
+  padding: 0.95rem 1rem !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(16px) saturate(135%);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+}
+
+.pagination-links a:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(
+    in srgb,
+    var(--foreground) 10%,
+    transparent
+  ) !important;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent) !important;
+  box-shadow: 0 16px 40px -36px rgba(2, 8, 23, 0.42) !important;
+}
+
+.pagination-links .link-title {
+  color: color-mix(in srgb, var(--foreground) 48%, transparent) !important;
+  font-size: 0.65rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase;
+}
+
+.pagination-links .link-page {
+  color: var(--foreground) !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+}
+
+.pagination-links a svg {
+  opacity: 0.5;
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.pagination-links a:hover svg {
+  opacity: 0.9;
+}
+
+footer a.print\:hidden,
+footer .sl-flex.print\:hidden {
+  transition: all 0.2s ease;
+}
+
+footer a.print\:hidden {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent);
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  color: color-mix(in srgb, var(--foreground) 72%, transparent) !important;
+  text-decoration: none !important;
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+}
+
+footer a.print\:hidden:hover {
+  color: var(--foreground) !important;
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  border-color: color-mix(in srgb, var(--foreground) 9%, transparent);
+}
+
+footer a.print\:hidden svg {
+  opacity: 0.7;
+}
+
+/* Search */
+site-search button {
+  min-height: 2.65rem;
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+}
+
+site-search button:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--foreground) 9%,
+    transparent
+  ) !important;
+  background: color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+}
+
+/* Focus and theme controls */
+.focus-btn,
+.theme-select button,
+[data-theme-toggle] {
+  border-radius: 999px !important;
+  border: 1px solid color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  background: color-mix(in srgb, var(--foreground) 4%, transparent) !important;
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+}
+
+.focus-btn:hover,
+.theme-select button:hover,
+[data-theme-toggle]:hover {
+  background: color-mix(in srgb, var(--foreground) 6%, transparent) !important;
+  border-color: color-mix(
+    in srgb,
+    var(--foreground) 9%,
+    transparent
+  ) !important;
+}
+
+/* Focus mode */
+html.focus-mode {
+  --sl-sidebar-width: 0px !important;
+}
+
+html.focus-mode .sidebar-pane,
+html.focus-mode .right-sidebar-container {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html.focus-mode .main-pane {
+  max-width: 60rem !important;
+  margin: 0 auto !important;
+}
+
+/* Selection and scrollbar */
+::selection {
+  background: color-mix(in srgb, var(--setu-accent) 35%, white 10%);
+  color: #03111f;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--foreground) 14%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--setu-accent) 42%, transparent);
+  background-clip: padding-box;
+}
+
+@media (min-width: 50rem) {
+  .main-pane {
+    padding: 1.1rem 1.25rem 3.2rem !important;
+  }
+}
+
+@media (min-width: 72rem) {
+  .main-pane {
+    padding-inline-end: 1.55rem !important;
+  }
+
+  .right-sidebar-container {
+    width: 15.25rem !important;
+    padding-left: 0.85rem;
+  }
+
+  .right-sidebar-panel {
+    width: 100%;
+  }
+
+  .right-sidebar-panel .sl-container {
+    width: 100% !important;
+    max-width: 14.4rem !important;
+  }
+}
+
+@media (max-width: 50rem) {
+  :root {
+    --sl-nav-height: 4rem;
+  }
+
+  .sidebar-pane {
+    padding: 0.38rem !important;
+    background: var(--background) !important;
+  }
+
+  .main-pane {
+    padding: 1rem 0.3rem 2rem !important;
+  }
+
+  .content-panel {
+    border-radius: 0;
+  }
+
+  .sl-markdown-content,
+  .pagination-links {
+    padding-inline: 1rem;
+  }
+
+  .sl-markdown-content {
+    padding: 0 0.85rem 2.2rem;
+    font-size: 0.95rem !important;
+    line-height: 1.78 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .sl-markdown-content .sl-anchor-link {
+    display: none !important;
+  }
+
+  .sl-markdown-content .sl-heading-wrapper > :first-child {
+    padding-inline-end: 0 !important;
+  }
+
+  .sl-markdown-content h2:not(:where(.not-content *)) {
+    margin-top: 2.9rem !important;
+    font-size: 1.45rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .sl-markdown-content h3:not(:where(.not-content *)) {
+    margin-top: 2rem !important;
+    font-size: 1.08rem !important;
+  }
+
+  .sl-markdown-content :is(table, pre, .expressive-code) {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .sl-markdown-content table:not(:where(.not-content *)) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sl-markdown-content th:not(:where(.not-content *)),
+  .sl-markdown-content td:not(:where(.not-content *)) {
+    padding: 0.72rem 0.8rem !important;
+  }
+
+  .sl-markdown-content pre:not(:where(.not-content *)),
+  .sl-markdown-content .expressive-code {
+    border-radius: 0.75rem !important;
+  }
+
+  .pagination-links {
+    grid-template-columns: 1fr !important;
+    padding-inline: 0.85rem;
+    padding-bottom: 1rem;
+  }
+
+  mobile-starlight-toc .toggle {
+    width: 100%;
+  }
+
+  footer {
+    padding-inline: 1rem;
+    padding-bottom: 1.2rem;
+  }
+
+  footer .meta {
+    margin-top: 1rem !important;
+    padding-top: 0.75rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  .main-pane {
+    padding-inline: 0 !important;
+  }
+
+  .sl-markdown-content {
+    padding-inline: 0.75rem;
+  }
+
+  .breadcrumbs {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

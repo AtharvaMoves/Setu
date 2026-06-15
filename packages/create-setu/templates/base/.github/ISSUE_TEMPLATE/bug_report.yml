@@ -1,0 +1,21 @@
+name: Bug report
+description: Report a reproducible problem in Setu.
+body:
+  - type: textarea
+    attributes:
+      label: Problem
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction
+      description: Provide the smallest reproducible example and relevant configuration.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment
+      description: Include Node.js version, operating system, and deployment provider.
+    validations:
+      required: true
